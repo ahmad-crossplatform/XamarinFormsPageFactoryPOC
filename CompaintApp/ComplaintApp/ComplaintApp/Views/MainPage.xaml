@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:ComplaintApp.ViewModels;assembly=ComplaintApp"
+             xmlns:customControls="clr-namespace:ComplaintApp.CustomControls;assembly=ComplaintApp"
+             x:Class="ComplaintApp.MainPage">
+    <ContentPage.BindingContext>
+        <viewModels:MainPageViewModel/>
+    </ContentPage.BindingContext>
+
+    <TableView HasUnevenRows="True">
+        <TableRoot>
+            <TableSection >
+                <customControls:RequiredLabelCell Text="General Information" Command="{Binding GeneralInformationCommand}"/>
+                <customControls:RequiredLabelCell Text="Product Information" Command="{Binding ProductInformationCommand}"/>
+                <customControls:RequiredLabelCell Text="Client Information" Command="{Binding ClientInformationCommand}"/>
+            </TableSection>
+        </TableRoot>
+    </TableView>
+
+</ContentPage>

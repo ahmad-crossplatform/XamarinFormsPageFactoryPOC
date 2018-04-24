@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<customControls:RequiredCell xmlns="http://xamarin.com/schemas/2014/forms"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                             xmlns:customControls="clr-namespace:ComplaintApp.CustomControls;assembly=ComplaintApp"
+                             x:Class="ComplaintApp.CustomControls.RequiredEntryCell">
+
+    <customControls:RequiredCell.OuterStackLayout>
+        <StackLayout>
+            <Entry x:Name="Entry" FontSize="15" />
+        </StackLayout>
+    </customControls:RequiredCell.OuterStackLayout>
+</customControls:RequiredCell>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:ComplaintApp.ViewModels;assembly=ComplaintApp"
+             xmlns:customControls="clr-namespace:ComplaintApp.CustomControls;assembly=ComplaintApp"
+             x:Class="ComplaintApp.Views.GeneralInformationPage"
+             Title="General Information">
+    <ContentPage.BindingContext>
+        <viewModels:GeneralInformationPageViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+      <TableView HasUnevenRows="True">
+          <TableRoot>
+              <TableSection>
+                  <customControls:RequiredDatePickerCell  Title="Reported Date" Date="{Binding ReportTime}" />
+                  <customControls:RequiredEntryCell Title="Short Description" IsRequired="True" Text="{Binding ShortDescription}"/>
+                  <customControls:RequiredEditorCell Title="Long Description" IsRequired="True" Text="{Binding LongDescription}"/>
+              </TableSection>
+          </TableRoot>
+      </TableView>
+    </ContentPage.Content>
+</ContentPage>
