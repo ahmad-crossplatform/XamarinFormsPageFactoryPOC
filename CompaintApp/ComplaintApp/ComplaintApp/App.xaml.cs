@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using ComplaintApp.Views;
+using Xamarin.Forms;
 
 namespace ComplaintApp
 {
@@ -8,7 +9,7 @@ namespace ComplaintApp
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new LoginPage());
         }
 
         protected override void OnStart()

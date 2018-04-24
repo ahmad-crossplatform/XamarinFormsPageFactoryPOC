@@ -2,12 +2,17 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:ComplaintApp.ViewModels;assembly=ComplaintApp"
              x:Class="ComplaintApp.Views.LoginPage">
+    <ContentPage.BindingContext>
+        <viewModels:LoginPageViewModel/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
-            <Label x:Name="mainLabel" Text="Welcome to Xamarin.Forms!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand"  />
+        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+              <Entry Placeholder="Username ...." Text="{Binding Username}"/>
+              <Entry Placeholder="Password ...." Text="{Binding Password}" IsPassword="True"/>
+              <Button Text="Login" Command="{Binding LoginCommand}"/>
+              <ActivityIndicator IsRunning="{Binding IsBusy}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

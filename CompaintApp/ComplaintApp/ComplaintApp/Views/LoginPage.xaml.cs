@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using ComplaintApp.ViewModels;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace ComplaintApp.Views
@@ -9,7 +10,10 @@ namespace ComplaintApp.Views
         public LoginPage()
         {
             InitializeComponent();
-            
+            if (BindingContext is LoginPageViewModel viewmodel)
+            {
+                viewmodel.LoggedIn += async (sender, args) => { await Navigation.PushAsync(new MainPage());}; 
+            }
         }
     }
 }
