@@ -263,16 +263,16 @@ You can start by removing the event handlers which the code behind listens to so
 
 ## Pros and Cons
 ### Pros
-- **Code Reduction **
+- **Code Reduction**
 If you have multiple pages that can be produced with the Pagefactory then you will basically remove view code for these pages . 
 
-- **Flexibility **
+- **Flexibility**
 The flexibility gets higher, you can change a feild on a page from one type to another type only by change the decorating attributes , you can change the order of the fields but just changing the order of the properties.  Adding new feilds is easier and quicker. 
 
-- **More focus on logic **
+- **More focus on logic**
 When you get to focus only on the viewmodel , the business logic will get more focus by the developer than if there was a view presenting the view model , where the developer should make sure that  the bindings are correct and if everything is in the right order 
 
-- **Fewer human errors **
+- **Fewer human errors**
 Of course when our pages are generated automatically it means that less human interaction is required and thus fewer errors from the developers . 
 
 
