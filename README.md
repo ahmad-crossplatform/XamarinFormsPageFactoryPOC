@@ -97,7 +97,6 @@ public class PageFactory : IPageFactory
         {
 
             ContentPage page = new ContentPage();
-            page.BackgroundColor = Color.Yellow;
             var tableView = new TableView() { HasUnevenRows = true };
             var tableRoot = new TableRoot();
             var tableSection = new TableSection();
@@ -184,7 +183,7 @@ public class PageFactory : IPageFactory
 
 
                 //Add the button
-                if (propertyInfo.PropertyType == typeof(ICommand))
+                if (propertyInfo.PropertyType == typeof(ICommand)|| propertyInfo.PropertyType == typeof(Command) )
                 {
                     var command = (ICommand)propertyInfo.GetValue(page.BindingContext);
                     var button = new Button
@@ -284,7 +283,7 @@ This issue can be addressed by finding a good pattern to write the ``PageFactory
 - **Not suitable for small apps** 
 This concept probably will not be the best choice if the app has few pages or there is no common pattern among them. 
 ## FAQ
-- **When is this method recommended to be used? **
+- **When is this method recommended to be used?**
   le apps with several pages which has the same purpose, can be used in Industrial apps, or apps for questionnaires, or any data entry apps that that beauty and interactivity are not the main focus .   
 
 - **When is this method *Not* recommended to be used?**
