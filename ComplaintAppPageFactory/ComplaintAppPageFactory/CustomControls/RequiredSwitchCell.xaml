@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<customControls:RequiredCell xmlns="http://xamarin.com/schemas/2014/forms"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                             xmlns:customControls="clr-namespace:ComplaintAppPageFactory.CustomControls;assembly=ComplaintAppPageFactory"
+                             x:Class="ComplaintAppPageFactory.CustomControls.RequiredSwitchCell">
+    <customControls:RequiredCell.OuterStackLayout>
+        <StackLayout Padding="5">
+            <StackLayout Orientation="Horizontal">
+                <StackLayout Orientation="Horizontal">
+                    <Switch x:Name="Switch" />
+                    <Label Text="Yes" BindingContext="{x:Reference Name=Switch}" IsVisible="{Binding Path=IsToggled}">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label"
+                                         Binding="{Binding Source={x:Reference Switch}, Path=IsToggled}"
+                                         Value="True">
+                                <Setter Property="IsVisible" Value="True" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+
+                    <Label Text="No" BindingContext="{x:Reference Name=Switch}" IsVisible="{Binding Path=IsToggled}">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label"
+                                         Binding="{Binding Source={x:Reference Switch}, Path=IsToggled}"
+                                         Value="False">
+                                <Setter Property="IsVisible" Value="True" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </customControls:RequiredCell.OuterStackLayout>
+</customControls:RequiredCell>
