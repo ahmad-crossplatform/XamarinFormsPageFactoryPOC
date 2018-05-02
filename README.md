@@ -1,9 +1,11 @@
 # POC: Xamarin.Forms Page Factory Concept
 ## Intro
 
-The Page factory can be used for non-commercial Apps which are data oriented to make the process of building an app quicker and more fun. It produces the pages on the fly without you have to design them in advance. To create a page the Page factory takes the designated viewmodel and based on the attributes the properties are tagged with 
+The Page factory can be used for non-commercial Apps which are data oriented to make the process of building an app quicker and more fun. Why? the license modeled is choosen on github. More fun? 
 
-## Background
+It produces the pages on the fly without you have to design them in advance. To create a page the Page factory takes the designated viewmodel and based on the attributes the properties are tagged with 
+
+## Background ??? Relevant for a pagefactory?
 
 We have got an assignment to make a complaint app. It has a web version, which kind of long with some questions followed by other questions. To make easier for the user , the fields are grouped by relevence. 
 ![alt text](https://i.imgur.com/FzHozrp.png "a sample of how big can the forms be")
@@ -43,7 +45,7 @@ Have a look at our repository and you will see there are two Projects ``Complain
 
 As you might guessed they are the same application but the second one applies the PageFactory concept 
 
-- **Finding the pages which have the same pattern** 
+- **Finding the pages which have the same pattern** ADD GIST TO Explain?
   if we look closely we can find that `MainPage`, `GeneralInformationPage`, `ProductInformationPage` and `ClientInformationPage` have the same pattern; they are pages that has a table view with different cells to represent the data. Some of these cells are required and some are not . They also use custom controls to present the data.  
 
 - **Creating attributes to decorate the viewmodel**
@@ -66,7 +68,7 @@ As you might guessed they are the same application but the second one applies th
 
   The `Title` attribute can be applied on the class level and that will give a title to the page. If we apply the title attribute to the command level, the page factory with crate a button and give it the title. 
 
-- **Create your page factory**
+- **Create your page factory** . This is not a code review... but this netsted ifs are a anti pattern.
 
   Here is our implementation for the page factory 
 ```C#
@@ -240,18 +242,18 @@ public class PageFactory : IPageFactory
         }
     }
 ```
-- - For the sake of having a POC the Page Factory produces only ContentPage 
-  - To iterate between properties in the viewmodel , Reflection is used. 
+- - For the sake of having a POC the Page Factory produces only ContentPage ?? ?? conider removing?
+  - To iterate between properties in the viewmodel , Reflection is used. ?? Why say this, its says in code?
   - The checking order can be very important. In this case , we check first if it is a text, then editable then. 
   - `PageFactory` does not only creates pages, but also handles Alerts and Navigation so that they could be called from the view-model . 
-  - If you change the order of the properties in the viewmodel then order of the elements in the page will change accordingly.
+  - If you change the order of the properties in the viewmodel then order of the elements in the page will change accordingly. ?? This is a anti parrern as codestyling such as stylecop, reharper etc. should be possible to use
   - Should the `PageFactory` be a static class? 
 
 
 - **Apply the PageFactory  concept on the view models.** 
 
 You can start by removing the event handlers which the code behind listens to so it can navigate, and use the navigation methods given by the page factory. 
-*Look at the changes we did in `MainPageViewModel`*
+*Look at the changes we did in `MainPageViewModel`* ?? What changes .... ad gist?
 
 - **Remove the views which we targeted earlier**
 
@@ -266,13 +268,13 @@ You can start by removing the event handlers which the code behind listens to so
 If you have multiple pages that can be produced with the Pagefactory then you will basically remove view code for these pages . 
 
 - **Flexibility**
-The flexibility gets higher, you can change a feild on a page from one type to another type only by change the decorating attributes , you can change the order of the fields but just changing the order of the properties.  Adding new feilds is easier and quicker. 
+The flexibility gets higher, you can change a feild on a page from one type to another type only by change the decorating attributes , you can change the order of the fields but just changing the order of the properties.  Adding new feilds is easier and quicker. ?? Really.... is this quicker then adding a element on a view or the same? 
 
 - **More focus on logic**
-When you get to focus only on the viewmodel , the business logic will get more focus by the developer than if there was a view presenting the view model , where the developer should make sure that  the bindings are correct and if everything is in the right order 
+When you get to focus only on the viewmodel , the business logic will get more focus by the developer than if there was a view presenting the view model , where the developer should make sure that  the bindings are correct and if everything is in the right order ?? Is this a pro? to make an application lose focus on design? 
 
 - **Fewer human errors**
-Of course when our pages are generated automatically it means that less human interaction is required and thus fewer errors from the developers . 
+Of course when our pages are generated automatically it means that less human interaction is required and thus fewer errors from the developers.  
 
 
 ### Cons 
@@ -284,7 +286,7 @@ This issue can be addressed by finding a good pattern to write the ``PageFactory
 This concept probably will not be the best choice if the app has few pages or there is no common pattern among them. 
 ## FAQ
 - **When is this method recommended to be used?**
-  le apps with several pages which has the same purpose, can be used in Industrial apps, or apps for questionnaires, or any data entry apps that that beauty and interactivity are not the main focus .   
+  le apps with several pages which has the same purpose, can be used in Industrial apps, or apps for questionnaires, or any data entry apps that that beauty and interactivity are not the main focus . ?? Interactivity should always be in focus for a good app?? 
 
 - **When is this method *Not* recommended to be used?**
   Apps with few number of pages , apps with very sophisticated design and styles, or Apps with pages that are totally different from each other and not many similar pages.
