@@ -294,7 +294,7 @@ This concept probably will not be the best choice if the app has few pages or th
 
 - **Can we integrate it with MVVM framework like Prism?**
   Yes. There is already a poc that has a PrismApp where the PageFactory is used. 
-  Check [PrismPageFactoryRepository](www.google.com) 
+  Check [PageFactoryForPrismRepository](https://github.com/ahmad-crossplatform/POC-XF-PageFactory-PRISM) 
 
 - **How about the performance?**
   Our first tests in a low end PC showed that  after the app launches, it takes longer time to generate the first produced page than usual. However after that all the pages are produced instantly just like as if they were already written.  There is a slight chance that 
