@@ -1,15 +1,44 @@
 # POC: Xamarin.Forms Page Factory Concept
 ## Intro
-
-The Page factory can be used for non-commercial Apps which are data oriented to make the process of building an app quicker and more fun. It produces the pages on the fly without you have to design them in advance. To create a page the Page factory takes the designated viewmodel and based on the attributes the properties are tagged with 
-
+Some apps might have several pages which follow the same pattern, the idea of this concept is to have a factory that produces these pages for you without the need to design them manually. 
 ## Background
 
-We have got an assignment to make a complaint app. It has a web version, which kind of long with some questions followed by other questions. To make easier for the user , the fields are grouped by relevence. 
+While working for a customer, we have got an assignment to make a complaint app. It has a web version, which kind of long with some questions followed by other questions. To make easier for the user , the fields are grouped by relevence. 
 ![alt text](https://i.imgur.com/FzHozrp.png "a sample of how big can the forms be")
 
 Unlike the web where space is not an issue, space is a serious issue when it comes to mobile apps , after all how big can a mobile screen be . Therefore to overcome this issue we decided to create a page for every group of questions, For example questions  regarding the general information would be in a `GeneralInformationPage` ,  information about product can be in a `ProductInformationPage` and so on. 
 In our specific project that means we need to create more than 15 pages which are resposible to fill data of more than 15 grouped information about the complaint. At that piont the idea of having a page factory came to light. 
+
+## FAQ
+- **When is this method recommended to be used?**
+  le apps with several pages which has the same purpose, can be used in Industrial apps, or apps for questionnaires, or any data entry apps that that beauty and interactivity are not the main focus .   
+
+- **When is this method *Not* recommended to be used?**
+  Apps with few number of pages , apps with very sophisticated design and styles, or Apps with pages that are totally different from each other and not many similar pages.
+
+- **How mature is this code?**
+  Not at all , this is just a POC to show how the PageFactory works . 
+
+- **Can we integrate it with MVVM framework like Prism?**
+  Yes. There is already a poc that has a PrismApp where the PageFactory is used. 
+  Check [PageFactoryForPrismRepository](https://github.com/ahmad-crossplatform/POC-XF-PageFactory-PRISM) 
+
+- **How about the performance?**
+  Our first tests in a low end PC showed that  after the app launches, it takes longer time to generate the first produced page than usual. However after that all the pages are produced instantly just like as if they were already written.  There is a slight chance that 
+
+- **How can this concepts be improved?**
+
+  Many things can make the concept better, to start with more attributes, for example attributes for Image,or List attributes, attributes for page type as currently it is only for `ContentPage`.
+
+  Another improvement can be to have PageFactory in its own nugetPackage . 
+
+  We can think of the custom controls , should they be part of the PageFactory Nuget ? or shall we have a mechanism to connect the Attributes with the visual elements in a dynamic way somehow ? 
+
+- **What is the highest ambition for the PageFactory Approach?**
+  To have a standard page factory component, and a view-less  M-V-VM pattern.  
+
+- **Why have you placed the FAQ on top of the document?**
+  So people would have more ideas and less assumbtions before proceeding with reading the document. 
 
 
 ## PageFactory Concepts
@@ -17,7 +46,6 @@ In our specific project that means we need to create more than 15 pages which ar
 This is the class where it takes viewmodels, produces pages based on the properties and their attributes, and bind the pages to their viewmodels . 
 The factory can also used for navigation and it keeps track of the pages. 
 
-``Note: It is important to have one instance of Pagefactory that wil keep track on Pages``
 - **Produced Pages** 
 Pages which are produced by the Page Factory on the run time.
 
@@ -35,9 +63,6 @@ For example, having a ``Required`` attribute on the property would direct the `P
 ```
 If the property has no attributes then the `PageFactory` should ignore it . 
 
-- **Reusable Controls** 
-If you have special controls that can be reused it is recommended to have them designed before applying the page factory approach. For example if you have a control that shows the required validation error , then this can be reused easily . 
-
 ## Applying the `PageFactory` concept 
 Have a look at our repository and you will see there are two Projects ``ComplaintApp`` and ``ComplaintAppPageFactory`` . 
 
@@ -54,9 +79,9 @@ As you might guessed they are the same application but the second one applies th
   | SwitchAttribute   | The element is a switch                                      |
   | CommandAttribute  | The element has a Command Property                           |
   | DateAttribute     | The element is a DatePicker                                  |
-  | TextAttribute     | The element is a label unless the property has `EditableAttribute` |
-  | EditableAttribute | The element is `Entry` and it requires `Text` attribute.     |
-  | EditorAttribute   | The element is `Editor` and it requires `Text` and `Editable` attributes. |
+  | LabelAttribute    | The element is a label										 |
+  | EntryAttribute	  | The element is `Entry`										 |
+  | LongTextAttribute | The element is `Editor`										 |
   | TitleAttribute    | The title of the element and it can be applied on the page level and the button by decorating the class of the VM and the command property |
   | RequiredAttribute | This will enable the required functionality of the element.  |
 
@@ -95,9 +120,8 @@ public class PageFactory : IPageFactory
 
         public Page CreatePage(INotifyPropertyChanged viewModel, Type type)
         {
-
-            ContentPage page = new ContentPage();
-            var tableView = new TableView() { HasUnevenRows = true };
+            var page = new ContentPage();
+            var tableView = new TableView {HasUnevenRows = true};
             var tableRoot = new TableRoot();
             var tableSection = new TableSection();
 
@@ -113,96 +137,68 @@ public class PageFactory : IPageFactory
 
             foreach (var propertyInfo in type.GetProperties())
             {
-                if (!propertyInfo.CustomAttributes.Any())
-                {
-                    continue; 
-                }
-                var isRequired = propertyInfo.CustomAttributes.Any(c => c.AttributeType == typeof(RequiredAttribute));
-                RequiredCell child = null;
+                if (!propertyInfo.CustomAttributes.Any()) continue;
+                var child = new RequiredCell();
+                var isRequired = false; 
                 var title = "";
 
-                // Title 
-                if (propertyInfo.CustomAttributes.Any(c => c.AttributeType == typeof(TitleAttribute)))
+                foreach (var attribute in propertyInfo.CustomAttributes)
                 {
-                    var titleAttribte = propertyInfo.CustomAttributes.Single(c => c.AttributeType == typeof(TitleAttribute));
-                    title = titleAttribte.ConstructorArguments[0].Value.ToString();
-                }
-
-                // Text
-                if (propertyInfo.CustomAttributes.Any(c => c.AttributeType == typeof(TextAttribute)))
-                {
-
-                    if (propertyInfo.CustomAttributes.Any(c => c.AttributeType == typeof(EditableAttribute)))
+                    switch (attribute.AttributeType.Name)
                     {
-                        child = new RequiredEntryCell() { Title = title, IsRequired = isRequired };
-                        child.SetBinding(RequiredEntryCell.TextProperty, propertyInfo.Name, BindingMode.TwoWay);
-
-                        if (propertyInfo.CustomAttributes.Any(c => c.AttributeType == typeof(EditorAttribute)))
-                        {
-                            child = new RequiredEditorCell() { Title = title, IsRequired = isRequired };
+                        case nameof(TitleAttribute):
+                            title = attribute.ConstructorArguments[0].Value.ToString();
+                            break;
+                        case nameof(RequiredAttribute):
+                            isRequired = true; 
+                            break;
+                        case nameof(LabelAttribute):
+                            child = new RequiredLabelCell();
+                            child.SetBinding(RequiredLabelCell.TextProperty, propertyInfo.Name, BindingMode.TwoWay);
+                            break;
+                        case nameof(EntryAttribute):
+                            child = new RequiredEntryCell();
+                            child.SetBinding(RequiredEntryCell.TextProperty, propertyInfo.Name, BindingMode.TwoWay);
+                            break;
+                        case nameof(LongTextAttribute):
+                            child = new RequiredEditorCell();
                             child.SetBinding(RequiredEditorCell.TextProperty, propertyInfo.Name, BindingMode.TwoWay);
-                        }
+                            break;
+                        case nameof(SwitchAttribute):
+                            child = new RequiredSwitchCell();
+                            child.SetBinding(RequiredSwitchCell.IsToggledProperty, propertyInfo.Name, BindingMode.TwoWay);
+                            break;
+                        case nameof(DateAttribute):
+                            child = new RequiredDatePickerCell ();
+                            child.SetBinding(RequiredDatePickerCell.DateProperty, propertyInfo.Name, BindingMode.TwoWay);
+                            break;
+                        case nameof(CommandAttribute):
+                            var commandName = attribute.ConstructorArguments[0].Value.ToString();
+                            var command = (ICommand)type.GetProperties().Single(p => p.Name == commandName).GetValue(viewModel);
+                            child.Command = command;
+                            break;
                     }
-                    else  // Create a label 
-                    {
-                        child = new RequiredLabelCell() { Title = title, IsRequired = isRequired };
-                        child.SetBinding(RequiredLabelCell.TextProperty, propertyInfo.Name, BindingMode.TwoWay);
-
-                    }
                 }
-
-                // Create switch cell  
-                if (propertyInfo.CustomAttributes.Any(c => c.AttributeType == typeof(SwitchAttribute)))
-                {
-                    child = new RequiredSwitchCell() { Title = title };
-                    child.SetBinding(RequiredSwitchCell.IsToggledProperty, propertyInfo.Name, BindingMode.TwoWay);
-                }
-
-                // Create a date picker 
-                if (propertyInfo.CustomAttributes.Any(c => c.AttributeType == typeof(DateAttribute)))
-                {
-
-                    child = new RequiredDatePickerCell() { Title = title };
-
-                    child.SetBinding(RequiredDatePickerCell.DateProperty, propertyInfo.Name, BindingMode.TwoWay);
-                }
-
-
-                if (propertyInfo.CustomAttributes.Any(c => c.AttributeType == typeof(CommandAttribute)))
-                {
-                    var commandAttribute = propertyInfo.CustomAttributes.Single(c => c.AttributeType == typeof(CommandAttribute));
-                    var commandName = commandAttribute.ConstructorArguments[0].Value.ToString();
-                    var command = (ICommand) type.GetProperties().Single(p => p.Name == commandName).GetValue(viewModel);
-                    if (command == null)
-                    {
-                        continue;
-                    }
-
-                    if (child != null) child.Command = command;
-                }
-
-
+                child.Title = title;
+                child.IsRequired = isRequired; 
                 //Add the button
-                if (propertyInfo.PropertyType == typeof(ICommand)|| propertyInfo.PropertyType == typeof(Command) )
+                if (propertyInfo.PropertyType == typeof(ICommand) || propertyInfo.PropertyType == typeof(Command))
                 {
-                    var command = (ICommand)propertyInfo.GetValue(page.BindingContext);
+                    var command = (ICommand) propertyInfo.GetValue(page.BindingContext);
                     var button = new Button
                     {
                         Text = title,
                         Command = command
                     };
-                    child = new RequiredCell()
+                    child = new RequiredCell
                     {
-
                         View = button
                     };
                 }
-                if (child == null)
-                {
-                    continue;
-                }
+
                 tableSection.Add(child);
             }
+
             tableRoot.Add(tableSection);
             tableView.Root = tableRoot;
             stackLayout.Children.Add(tableView);
@@ -241,11 +237,8 @@ public class PageFactory : IPageFactory
     }
 ```
 - - For the sake of having a POC the Page Factory produces only ContentPage 
-  - To iterate between properties in the viewmodel , Reflection is used. 
-  - The checking order can be very important. In this case , we check first if it is a text, then editable then. 
   - `PageFactory` does not only creates pages, but also handles Alerts and Navigation so that they could be called from the view-model . 
-  - If you change the order of the properties in the viewmodel then order of the elements in the page will change accordingly.
-  - Should the `PageFactory` be a static class? 
+  - If you change the order of the properties in the viewmodel then order of the elements in the page will change accordingly, this sounds like a wierd thing but turned to be a cool feature. 
 
 
 - **Apply the PageFactory  concept on the view models.** 
@@ -282,31 +275,5 @@ This issue can be addressed by finding a good pattern to write the ``PageFactory
 
 - **Not suitable for small apps** 
 This concept probably will not be the best choice if the app has few pages or there is no common pattern among them. 
-## FAQ
-- **When is this method recommended to be used?**
-  le apps with several pages which has the same purpose, can be used in Industrial apps, or apps for questionnaires, or any data entry apps that that beauty and interactivity are not the main focus .   
 
-- **When is this method *Not* recommended to be used?**
-  Apps with few number of pages , apps with very sophisticated design and styles, or Apps with pages that are totally different from each other and not many similar pages.
-
-- **How mature is this code?**
-  Not at all , this is just a POC to show how the PageFactory works . 
-
-- **Can we integrate it with MVVM framework like Prism?**
-  Yes. There is already a poc that has a PrismApp where the PageFactory is used. 
-  Check [PageFactoryForPrismRepository](https://github.com/ahmad-crossplatform/POC-XF-PageFactory-PRISM) 
-
-- **How about the performance?**
-  Our first tests in a low end PC showed that  after the app launches, it takes longer time to generate the first produced page than usual. However after that all the pages are produced instantly just like as if they were already written.  There is a slight chance that 
-
-- **How can this concepts be improved?**
-
-  Many things can make the concept better, to start with more attributes, for example attributes for Image,or List attributes, attributes for page type as currently it is only for `ContentPage`.
-
-  Another improvement can be to have PageFactory in its own nugetPackage . 
-
-  We can think of the custom controls , should they be part of the PageFactory Nuget ? or shall we have a mechanism to connect the Attributes with the visual elements in a dynamic way somehow ? 
-
-- **What is the highest ambition for the PageFactory Approach?**
-  To have a standard page factory component, and a view-less  M-V-VM pattern.  
 

@@ -2,7 +2,7 @@
 
 namespace ComplaintAppPageFactory.Attributes
 {
-    public class EditableAttribute : Attribute
+    public class LongTextAttribute : Attribute    
     {
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ComplaintAppPageFactory.Attributes
 {
-    public class EditorAttribute : Attribute    
+    public class EntryAttribute : Attribute
     {
     }
 }

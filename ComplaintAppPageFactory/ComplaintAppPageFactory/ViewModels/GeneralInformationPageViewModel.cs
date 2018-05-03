@@ -20,7 +20,7 @@ namespace ComplaintAppPageFactory.ViewModels
             }
         }
 
-        [Title( "Give a short description"), Text, Editable, Required]
+        [Title( "Give a short description"),  Entry, Required]
         public string ShortDescription
         {
             get => _shortDescription;
@@ -30,7 +30,7 @@ namespace ComplaintAppPageFactory.ViewModels
                 OnPropertyChanged();
             }
         }
-        [Title( "Describe what happened in details"), Text, Editable, Editor, Required]
+        [Title( "Describe what happened in details"), LongText, Required]
         public string LongDescription
         {
             get => _longDescription;

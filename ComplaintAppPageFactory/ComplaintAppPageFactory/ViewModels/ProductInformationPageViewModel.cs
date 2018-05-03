@@ -11,7 +11,7 @@ namespace ComplaintAppPageFactory.ViewModels
         private string _productModel;
         private string _productName;
 
-        [Text, Editable, Title("Product Name"), Required]
+        [ Entry, Title("Product Name"), Required]
         public string ProductName
         {
             get => _productName;
@@ -22,7 +22,7 @@ namespace ComplaintAppPageFactory.ViewModels
             }
         }
         
-        [Text, Editable, Title("Product Model")]
+        [ Entry, Title("Product Model")]
         public string ProductModel
         {
             get => _productModel;
@@ -33,7 +33,7 @@ namespace ComplaintAppPageFactory.ViewModels
             }
         }
 
-        [Date, Title("Expiry Date")]
+        [Date, Title("Expiry Date"), Required]
         public DateTime ProductExpiryDate
         {
             get => _productExpiryDate;

@@ -14,7 +14,7 @@ namespace ComplaintAppPageFactory.ViewModels
             SaveCommand = new Command(Save);
         }
 
-        [Title( "Give a short description"), Text, Editable, Required]
+        [Title( "Give a short description"), Entry, Required]
         public string ClientName
         {
             get => _clientName;
@@ -25,7 +25,7 @@ namespace ComplaintAppPageFactory.ViewModels
             }
         }
 
-        [Title( "Give a short description"), Text, Editable, Required]
+        [Title( "Give a short description"),  Entry, Required]
         public string ClientAddress
         {
             get => _clientAddress;

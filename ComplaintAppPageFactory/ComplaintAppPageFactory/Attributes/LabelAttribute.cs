@@ -2,7 +2,7 @@
 
 namespace ComplaintAppPageFactory.Attributes
 {
-    public class TextAttribute : Attribute    
+    public class LabelAttribute : Attribute    
     {
     }
 }
