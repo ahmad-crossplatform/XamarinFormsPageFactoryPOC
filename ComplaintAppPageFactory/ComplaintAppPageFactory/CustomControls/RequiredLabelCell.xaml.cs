@@ -7,7 +7,7 @@ namespace ComplaintAppPageFactory.CustomControls
     public partial class RequiredLabelCell : RequiredCell
     {
         public static readonly BindableProperty TextProperty =
-            BindableProperty.Create(nameof(Text), typeof(string), typeof(RequiredLabelCell),
+            BindableProperty.Create(nameof(Text), typeof(string), typeof(RequiredLabelCell),"",
                 propertyChanged: OnTextPropertyChanged);
 
         public RequiredLabelCell()
