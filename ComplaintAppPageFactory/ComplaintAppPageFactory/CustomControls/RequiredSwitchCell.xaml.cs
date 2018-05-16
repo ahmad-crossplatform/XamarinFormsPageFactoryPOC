@@ -22,7 +22,7 @@ namespace ComplaintAppPageFactory.CustomControls
 
 
         public static readonly BindableProperty IsToggledProperty =
-            BindableProperty.Create(nameof(IsToggled), typeof(string), typeof(RequiredSwitchCell), "", propertyChanged: OnIsToggledPropertyChanged);
+            BindableProperty.Create(nameof(IsToggled), typeof(bool), typeof(RequiredSwitchCell), false, propertyChanged: OnIsToggledPropertyChanged);
 
         public bool IsToggled
         {
